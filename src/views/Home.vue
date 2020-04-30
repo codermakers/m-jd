@@ -16,6 +16,8 @@
           />
         </div>
       </activity>
+      <!-- 功能模块：图标导航 -->
+      <mode-option></mode-option>
     </div>
   </div>
 </template>
@@ -24,11 +26,13 @@
 import { swiperData, activityDatas } from "@/api/home.js";
 import MySwiper from "@c/MySwiper.vue";
 import Activity from "@c/Activity.vue";
+import ModeOption from "@c/ModeOption.vue";
 export default {
   name: "Home",
   components: {
     MySwiper,
-    Activity
+    Activity,
+    ModeOption
   },
   data() {
     return {
