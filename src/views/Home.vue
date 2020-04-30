@@ -5,53 +5,71 @@
       <my-swiper :swiperData="swiperData" :height="slideHeight">
         <slot name="pagination"></slot>
       </my-swiper>
+      <!-- 520活动 -->
+      <activity>
+        <div class="activity-520">
+          <img
+            v-for="(item, index) in activityDatas"
+            :src="item.icon"
+            :key="index"
+            alt=""
+          />
+        </div>
+      </activity>
     </div>
   </div>
 </template>
 
 <script>
+import { swiperData, activityDatas } from "@/api/home.js";
 import MySwiper from "@c/MySwiper.vue";
+import Activity from "@c/Activity.vue";
 export default {
   name: "Home",
   components: {
-    MySwiper
+    MySwiper,
+    Activity
   },
   data() {
     return {
-      swiperData: [
-        {
-          id: 1,
-          imgUrl:
-            "//m.360buyimg.com/mobilecms/s700x280_jfs/t1/90271/5/18058/100904/5e903077E6d94be1c/3dd16410ac9e6398.jpg!cr_1125x445_0_171!q70.jpg.dpg"
-        },
-        {
-          id: 2,
-          imgUrl:
-            "//m.360buyimg.com/mobilecms/s700x280_jfs/t1/114072/23/3596/150927/5ea93b31Eae6be065/9b428541bc22ea51.jpg!cr_1125x445_0_171!q70.jpg.dpg"
-        },
-        {
-          id: 3,
-          imgUrl:
-            "//m.360buyimg.com/mobilecms/s700x280_jfs/t1/110333/15/14507/90136/5ea7ddd3E74987663/148e060a9cf80493.jpg!cr_1125x445_0_171!q70.jpg.dpg"
-        },
-        {
-          id: 4,
-          imgUrl:
-            "//m.360buyimg.com/mobilecms/s700x280_jfs/t1/110333/15/14507/90136/5ea7ddd3E74987663/148e060a9cf80493.jpg!cr_1125x445_0_171!q70.jpg.dpg"
-        }
-      ],
-      slideHeight: "186px"
+      swiperData: [],
+      slideHeight: "186px",
+      activityDatas: []
     };
+  },
+  methods: {
+    initData() {
+      this.swiperData = swiperData;
+      this.activityDatas = activityDatas;
+    }
+  },
+  created() {
+    this.initData();
   }
 };
 </script>
 
 <style lang="scss" scoped>
+@import "@css/index.scss";
 .home {
   width: 100%;
   height: 100%;
-}
-.home-content {
-  height: 100%;
+  background-color: #f5f5f5;
+  &-content {
+    height: 100%;
+    .activity-520 {
+      position: relative;
+      z-index: 2;
+      // 注意:这里活动组件嵌入的3张图片有圆角，而div是方形的,故处理一些圆角问题
+      margin-top: px2rem(-8);
+      border-top-left-radius: px2rem(8);
+      border-top-right-radius: px2rem(8);
+      img {
+        width: 33.33%;
+        // 解决图片下边3px的bug问题
+        vertical-align: top;
+      }
+    }
+  }
 }
 </style>
