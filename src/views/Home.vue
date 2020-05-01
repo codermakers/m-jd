@@ -18,33 +18,40 @@
       </activity>
       <!-- 功能模块：图标导航 -->
       <mode-option></mode-option>
+      <!-- 秒杀模块 -->
+      <Second-kill :dataSource="secondsData"></Second-kill>
     </div>
   </div>
 </template>
 
 <script>
-import { swiperData, activityDatas } from "@/api/home.js";
+import { swiperData, activityDatas, secondsData } from "@/api/home.js";
 import MySwiper from "@c/MySwiper.vue";
 import Activity from "@c/Activity.vue";
 import ModeOption from "@c/ModeOption.vue";
+import SecondKill from "@c/SecondKill.vue";
+
 export default {
   name: "Home",
   components: {
     MySwiper,
     Activity,
-    ModeOption
+    ModeOption,
+    SecondKill
   },
   data() {
     return {
       swiperData: [],
       slideHeight: "186px",
-      activityDatas: []
+      activityDatas: [],
+      secondsData: []
     };
   },
   methods: {
     initData() {
       this.swiperData = swiperData;
       this.activityDatas = activityDatas;
+      this.secondsData = secondsData;
     }
   },
   created() {
@@ -58,9 +65,10 @@ export default {
 .home {
   width: 100%;
   height: 100%;
-  background-color: #f5f5f5;
+  background-color: $bgColor;
   &-content {
     height: 100%;
+    overflow-y: auto;
     .activity-520 {
       position: relative;
       z-index: 2;
