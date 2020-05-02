@@ -20,6 +20,14 @@
       <mode-option></mode-option>
       <!-- 秒杀模块 -->
       <Second-kill :dataSource="secondsData"></Second-kill>
+      <!-- 拼购节 -->
+      <activity>
+        <div class="activity-pin-gou-jie">
+          <img src="@imgs/pinGouJie.gif" alt="" />
+        </div>
+      </activity>
+      <!-- 商品列表 -->
+      <goods></goods>
     </div>
   </div>
 </template>
@@ -30,6 +38,7 @@ import MySwiper from "@c/MySwiper.vue";
 import Activity from "@c/Activity.vue";
 import ModeOption from "@c/ModeOption.vue";
 import SecondKill from "@c/SecondKill.vue";
+import Goods from "@c/goods/Goods.vue";
 
 export default {
   name: "Home",
@@ -37,7 +46,8 @@ export default {
     MySwiper,
     Activity,
     ModeOption,
-    SecondKill
+    SecondKill,
+    Goods
   },
   data() {
     return {
@@ -66,9 +76,10 @@ export default {
   width: 100%;
   height: 100%;
   background-color: $bgColor;
+  overflow: hidden;
+  overflow-y: auto;
   &-content {
     height: 100%;
-    overflow-y: auto;
     .activity-520 {
       position: relative;
       z-index: 2;
@@ -80,6 +91,14 @@ export default {
         width: 33.33%;
         // 解决图片下边3px的bug问题
         vertical-align: top;
+      }
+    }
+    .activity-pin-gou-jie {
+      width: 100%;
+      background-color: #fff;
+      margin-top: $marginSize;
+      img {
+        width: 100%;
       }
     }
   }

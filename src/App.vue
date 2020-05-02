@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <router-view />
-    <tool-bar @onChangeFrament="onChangeFrament"></tool-bar>
+    <tool-bar @onRouteChange="onRouteChange"></tool-bar>
   </div>
 </template>
 
@@ -13,8 +13,8 @@ export default {
     "tool-bar": ToolBar
   },
   methods: {
-    onChangeFrament(componentName) {
-      this.$router.replace("/" + componentName.toLowerCase());
+    onRouteChange(routePath) {
+      this.$router.replace(routePath);
     }
   }
 };

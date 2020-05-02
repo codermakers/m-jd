@@ -4,7 +4,7 @@
       v-for="(item, index) in toolBarData"
       :key="index"
       class="tool-bar-item"
-      @click="onChangeFrament(item,index)"
+      @click="handleItemCLick(item, index)"
     >
       <img
         class="tool-bar-item-img"
@@ -49,29 +49,31 @@ export default {
           hIcon: require("@imgs/home-h.svg"),
           // 名称
           name: "首页",
-          // 组件名称
-          componentName: "Home"
+          // 跳转路径
+          routePathName: "/home"
         },
         {
           nIcon: require("@imgs/cart-n.svg"),
           hIcon: require("@imgs/cart-h.svg"),
           name: "购物车",
-          componentName: "Cart"
+          // 跳转路径
+          routePathName: "/cart"
         },
         {
           nIcon: require("@imgs/me-n.svg"),
           hIcon: require("@imgs/me-h.svg"),
           name: "我的",
-          componentName: "Me"
+          // 跳转路径
+          routePathName: "/me"
         }
       ],
       selectItemIndex: 0
     };
   },
   methods: {
-    onChangeFrament(item, index) {
+    handleItemCLick(item, index) {
       this.selectItemIndex = index;
-      this.$emit("onChangeFrament", item.componentName);
+      this.$emit("onRouteChange", item.routePathName);
     }
   }
 };

@@ -3,7 +3,7 @@
     <div class="seconds-wrap">
       <div class="seconds-wrap-title">京东秒杀</div>
       <!-- 倒计时模块 -->
-      <count-down :endHours="12"></count-down>
+      <count-down :endHours="15"></count-down>
     </div>
     <div class="seconds-content">
       <div
