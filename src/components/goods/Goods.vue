@@ -24,11 +24,16 @@
       />
       <!-- 具体描述-->
       <div class="goods-item-desc">
-        <div class="goods-item-desc-name">
-          <!-- 是否为自营 -->
-          <!-- 是否有库存 -->
-          <span class="text-line-2">{{ item.name }}</span>
-        </div>
+        <p
+          class="goods-item-desc-name text-line-2"
+          :class="{ 'goods-item-desc-name-hint': !item.isHave }"
+        >
+          <!-- 是否为直营,这里将此抽离成一个组件,之后很多地方会用到 -->
+          <direct v-if="item.isDirect"></direct>
+          <!-- 是否有库存,这里将此抽离成一个组件,之后很多地方会用到 -->
+          <no-have v-if="!item.isHave"></no-have>
+          {{ item.name }}
+        </p>
         <div class="goods-item-desc-data">
           <!-- 价钱 -->
           <p class="goods-item-desc-data-price">
@@ -43,9 +48,15 @@
 </template>
 
 <script>
+import Direct from "./Direct.vue";
+import NoHave from "./NoHave.vue";
 import { goodsData } from "@/api/home.js";
 export default {
   name: "Goods",
+  components: {
+    Direct,
+    NoHave
+  },
   data() {
     return {
       dataSource: [],
@@ -160,6 +171,10 @@ export default {
       &-name {
         font-size: $infoSize;
         line-height: px2rem(18);
+        &-hint {
+          // 注意：缺货状态下,商品描述文字会变灰
+          color: $hintColor;
+        }
       }
       &-data {
         width: 100%;

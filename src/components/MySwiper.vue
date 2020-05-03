@@ -68,6 +68,9 @@ export default {
 
 <style lang="scss" scoped>
 @import "@css/index.scss";
+.swiper-slide-img {
+  width: 100%;
+}
 .swiper-pagination {
   bottom: px2rem(12);
   // 解决样式穿透问题,否则自定义custom-bullet-class失效

@@ -10,3 +10,8 @@
   -webkit-box-orient: vertical;
   display: -webkit-box;
 }
+
+// 遮罩层
+.z-index-max {
+  z-index: 999;
+}
