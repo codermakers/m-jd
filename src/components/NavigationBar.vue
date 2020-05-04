@@ -11,7 +11,7 @@
     :style="navBarStyle"
   >
     <!-- 左 -->
-    <div class="left">
+    <div class="left" @click="$emit('onLeftClick')">
       <!-- 默认状态 -->
       <img v-if="isShowBack" src="@imgs/back.svg" alt="" />
       <!-- 具名插槽 -->
@@ -53,6 +53,11 @@ export default {
         };
       }
     }
+  },
+  methods: {
+    onLeftClick() {
+      this.$router.go(-1);
+    }
   }
 };
 </script>
@@ -65,7 +70,6 @@ export default {
   align-items: center;
   width: 100%;
   height: 44px;
-  // background-color: transparent;
   .left,
   .right {
     display: flex;
@@ -80,6 +84,7 @@ export default {
   .center {
     flex: 1;
     display: flex;
+    justify-content: center;
     align-items: center;
     .page-title {
       font-size: $titleSize;

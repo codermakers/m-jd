@@ -6,22 +6,13 @@ Vue.use(VueRouter);
 const routes = [
   {
     path: "/",
-    redirect: "/home"
+    name: "Main",
+    component: () => import("@v/Main.vue")
   },
   {
-    path: "/home",
-    name: "Home",
-    component: () => import("@v/Home.vue")
-  },
-  {
-    path: "/cart",
-    name: "Cart",
-    component: () => import("@v/Cart.vue")
-  },
-  {
-    path: "/me",
-    name: "Me",
-    component: () => import("@v/Me.vue")
+    path: "/goodslist",
+    name: "GoodsList",
+    component: () => import("@v/GoodsList/GoodsList.vue")
   }
 ];
 

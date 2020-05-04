@@ -15,3 +15,27 @@
 .z-index-max {
   z-index: 999;
 }
+
+// z-index-2
+.z-index-2 {
+  z-index: 2;
+}
+
+//倒三角
+.caret {
+  display: inline-block;
+  width: 0;
+  height: 0;
+  border-top: px2rem(8) solid $mainColor;
+  border-left: px2rem(6) solid transparent;
+  border-right: px2rem(6) solid transparent;
+}
+
+// 遮罩层
+.cover {
+  // 注意:一定使用绝对定位，方可全屏展示
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.4);
+}

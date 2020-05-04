@@ -49,22 +49,22 @@ export default {
           hIcon: require("@imgs/home-h.svg"),
           // 名称
           name: "首页",
-          // 跳转路径
-          routePathName: "/home"
+          // 组件名称
+          componentName: "home"
         },
         {
           nIcon: require("@imgs/cart-n.svg"),
           hIcon: require("@imgs/cart-h.svg"),
           name: "购物车",
-          // 跳转路径
-          routePathName: "/cart"
+          // 组件名称
+          componentName: "cart"
         },
         {
           nIcon: require("@imgs/me-n.svg"),
           hIcon: require("@imgs/me-h.svg"),
           name: "我的",
-          // 跳转路径
-          routePathName: "/me"
+          // 组件名称
+          componentName: "me"
         }
       ],
       selectItemIndex: 0
@@ -73,7 +73,7 @@ export default {
   methods: {
     handleItemCLick(item, index) {
       this.selectItemIndex = index;
-      this.$emit("onRouteChange", item.routePathName);
+      this.$emit("onChangeFragment", item.componentName);
     }
   }
 };
