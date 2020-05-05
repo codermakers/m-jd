@@ -17,9 +17,14 @@
        3、计算Item的位置，来达到从上到下，从左到右依次排列的目的。
        
 
-    如果允许goods单独滑动,就加goods-scroll类,反之不加
-      
+    如果允许goods单独滑动,就加goods-scroll类,反之不加 
   -->
+  <!-- *
+    商品排序功能的实现
+       1、排序后的数据源，用来在html中展示(替换dataSource)
+       2、定义排序规则(可以直接使用GoodOptions中数据源的Id)
+       3、定义排序方法，根据排序规则来修改对应的排序
+   -->
   <div
     class="goods"
     :class="[layoutClass, { 'goods-scroll': isScroll }]"
@@ -28,7 +33,7 @@
     <div
       class="goods-item"
       :class="layoutItemClass"
-      v-for="(item, index) in dataSource"
+      v-for="(item, index) in sortGoodsData"
       :key="index"
       ref="goodsItem"
       :style="goodsItemStyles[index]"
@@ -86,6 +91,19 @@ export default {
     isScroll: {
       type: Boolean,
       default: true
+    },
+    /**
+     * 排序规则(GoodsOptions)
+     * 1:默认排序
+     * 1-2：价格由高到低
+     * 1-3：销量由高到低
+     * 2:有货优先
+     * 3:直营优先
+     * */
+
+    sort: {
+      type: String,
+      default: "1"
     }
   },
   components: {
@@ -94,7 +112,11 @@ export default {
   },
   data() {
     return {
+      // 数据源
       dataSource: [],
+      // 排序数据
+      sortGoodsData: [],
+
       //生成图片最大高度
       MAX_IMG_HEIGHT: 186,
       // 生成图片最小高度
@@ -118,8 +140,62 @@ export default {
   methods: {
     initData() {
       this.dataSource = goodsData;
+      // 数据排序
+      this.setSortGoodsData();
       // 设置布局
       this.initLayout();
+    },
+
+    // 商品排序
+    setSortGoodsData() {
+      switch (this.sort) {
+        // 默认
+        case "1":
+          // 深拷贝，不改变原数组
+          this.sortGoodsData = this.dataSource.slice(0);
+          break;
+        case "1-2":
+          this.getSortGoodsDataFromKey("price");
+          break;
+        case "1-3":
+          this.getSortGoodsDataFromKey("volume");
+          break;
+        // 有货优先
+        case "2":
+          this.getSortGoodsDataFromKey("isHave");
+          break;
+        // 直营优先
+        case "3":
+          this.getSortGoodsDataFromKey("isDirect");
+          break;
+      }
+    },
+    getSortGoodsDataFromKey(key) {
+      /**
+       * sort排序完成数据的排序
+       *  当接收的值为“负值”的时候,goods1在goods2之前
+       *  当接收的值为"正值"的时候，goods1排在goods之后
+       *  当接收的值为0的时候,排序不变
+       * */
+      this.sortGoodsData = this.sortGoodsData.sort((goods1, goods2) => {
+        let v1 = goods1[key],
+          v2 = goods2[key];
+        //处理Bolean类型的数据(直营、有货)
+        if (typeof v1 === "boolean") {
+          if (v1) {
+            return -1;
+          }
+          if (v2) {
+            return 1;
+          }
+          return 0;
+        }
+        // 处理float类型的数据
+        if (parseFloat(v1) >= parseFloat(v2)) {
+          return -1;
+        }
+        return 1;
+      });
     },
     /**
      * 设置布局，为不同的layout设定不同的展示形式
@@ -127,8 +203,6 @@ export default {
      *    1、goodsViewHeight ->垂直布局/网格布局(100%),瀑布流(实际高度)
      *    2、goodsItemStyles
      *    3、imgStyles
-
-     *
      * */
 
     initLayout() {
@@ -234,6 +308,9 @@ export default {
   watch: {
     layoutType() {
       this.initLayout();
+    },
+    sort() {
+      this.setSortGoodsData();
     }
   }
 };

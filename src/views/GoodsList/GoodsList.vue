@@ -6,8 +6,12 @@
       </template>
     </navigation-bar>
     <div class="goods-list-page-content z-index-2">
-      <goods-options></goods-options>
-      <goods :layoutType="layoutType.type" :isScroll="true"></goods>
+      <goods-options @optionsChange="onGoodsOptionsChange"></goods-options>
+      <goods
+        :layoutType="layoutType.type"
+        :isScroll="true"
+        :sort="sortType"
+      ></goods>
     </div>
   </div>
 </template>
@@ -43,7 +47,9 @@ export default {
         }
       ],
       // 当前goods展示形式
-      layoutType: {}
+      layoutType: {},
+      // goods排序规则
+      sortType: "1"
     };
   },
   created() {
@@ -57,7 +63,6 @@ export default {
     /**
      * 切换 goods 展示形式
      * */
-
     onChangelayoutTypeClick() {
       if (this.layoutType.type === "1") {
         this.layoutType = this.layoutTypeDatas[1];
@@ -66,6 +71,9 @@ export default {
       } else {
         this.layoutType = this.layoutTypeDatas[0];
       }
+    },
+    onGoodsOptionsChange(sortType) {
+      this.sortType = sortType;
     }
   }
 };

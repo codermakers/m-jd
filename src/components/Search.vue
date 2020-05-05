@@ -1,9 +1,7 @@
 <template>
   <div class="search" :style="{ 'background-color': bgColor }">
     <img class="search-img" :src="icon" alt="" />
-    <span class="search-hint" :style="{ color: hint }"
-      >大前端,混合开发移动商城系统</span
-    >
+    <span class="search-hint" :style="{ color: hint }">请输入关键字</span>
   </div>
 </template>
 

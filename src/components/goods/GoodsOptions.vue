@@ -167,6 +167,12 @@ export default {
       // 3、关闭子选项视图
       this.isShowSubContent = false;
     }
+  },
+  watch: {
+    selectOption(newVal) {
+      console.log(newVal);
+      this.$emit("optionsChange", newVal.id);
+    }
   }
 };
 </script>
