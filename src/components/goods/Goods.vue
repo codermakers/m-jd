@@ -15,10 +15,19 @@
        1、创建商品列表的基本的html和css,让Item 相对于 goods(div)定位
        2、生成不同高度的图片，撑起不同高度的item
        3、计算Item的位置，来达到从上到下，从左到右依次排列的目的。
+       
+
+    如果允许goods单独滑动,就加goods-scroll类,反之不加
+      
   -->
-  <div class="goods goods-waterfall" :style="{ height: goodsViewHeight }">
+  <div
+    class="goods"
+    :class="[layoutClass, { 'goods-scroll': isScroll }]"
+    :style="{ height: goodsViewHeight }"
+  >
     <div
-      class="goods-item goods-waterfall-item"
+      class="goods-item"
+      :class="layoutItemClass"
       v-for="(item, index) in dataSource"
       :key="index"
       ref="goodsItem"
@@ -62,6 +71,23 @@ import NoHave from "./NoHave.vue";
 import { goodsData } from "@/api/home.js";
 export default {
   name: "Goods",
+  props: {
+    /**
+     * 在父元素中指定的展示形式
+     * 1:垂直列表布局
+     * 2:网格布局
+     * 3：瀑布流布局
+     * */
+    layoutType: {
+      type: String,
+      default: "1"
+    },
+    // 是否允许Goods支持自动滑动
+    isScroll: {
+      type: Boolean,
+      default: true
+    }
+  },
   components: {
     Direct,
     NoHave
@@ -80,7 +106,10 @@ export default {
       // Item的样式集合
       goodsItemStyles: [],
       // 组件的高度由leftHeightTotal和rightHeightTotal的较大值决定
-      goodsViewHeight: 0
+      goodsViewHeight: "100%",
+      // 不同展示形式下的类名
+      layoutClass: "",
+      layoutItemClass: ""
     };
   },
   created() {
@@ -89,13 +118,49 @@ export default {
   methods: {
     initData() {
       this.dataSource = goodsData;
-      this.initImgStyle();
-      // 注意:调用时机，created里DOM尚未加载，使用$nextTick可以在下次DOM更新时执行
-      this.$nextTick(() => {
-        this.initWaterfall();
-        console.log(this.goodsItemStyles);
-      });
+      // 设置布局
+      this.initLayout();
     },
+    /**
+     * 设置布局，为不同的layout设定不同的展示形式
+     * 1、初始化影响到布局的数据
+     *    1、goodsViewHeight ->垂直布局/网格布局(100%),瀑布流(实际高度)
+     *    2、goodsItemStyles
+     *    3、imgStyles
+
+     *
+     * */
+
+    initLayout() {
+      // 初始化数据
+      this.goodsViewHeight = "100%";
+      this.goodsItemStyles = [];
+      this.imgStyles = [];
+      switch (this.layoutType) {
+        // 垂直布局
+        case "1":
+          this.layoutClass = "goods-list";
+          this.layoutItemClass = "goods-list-item";
+          break;
+        // 网格布局
+        case "2":
+          this.layoutClass = "goods-grid";
+          this.layoutItemClass = "goods-grid-item";
+          break;
+        // 瀑布流布局
+        case "3":
+          this.layoutClass = "goods-waterfall";
+          this.layoutItemClass = "goods-waterfall-item";
+          this.initImgStyle();
+          // 注意:调用时机，created里DOM尚未加载，使用$nextTick可以在下次DOM更新时执行
+          this.$nextTick(() => {
+            this.initWaterfall();
+            console.log(this.goodsItemStyles);
+          });
+          break;
+      }
+    },
+
     //生成随机图片高度
     randomImgHeight() {
       return (
@@ -156,11 +221,19 @@ export default {
         this.goodsItemStyles.push(goodsItem);
       });
 
-      // 5、组件的高度由leftHeightTotal和rightHeightTotal的较大值决定
-      this.goodsViewHeight =
-        (leftHeightTotal > rightHeightTotal
-          ? leftHeightTotal
-          : rightHeightTotal) + "px";
+      // 在允许Goods单独滑动的时候
+      if (!this.isScroll) {
+        // 5、组件的高度由leftHeightTotal和rightHeightTotal的较大值决定
+        this.goodsViewHeight =
+          (leftHeightTotal > rightHeightTotal
+            ? leftHeightTotal
+            : rightHeightTotal) + "px";
+      }
+    }
+  },
+  watch: {
+    layoutType() {
+      this.initLayout();
     }
   }
 };
@@ -170,8 +243,11 @@ export default {
 @import "@css/index.scss";
 .goods {
   background-color: $bgColor;
+  &-scroll {
+    overflow: hidden;
+    overflow-y: auto;
+  }
   &-item {
-    width: 50%;
     background-color: #fff;
     padding: $marginSize;
     box-sizing: border-box;
@@ -204,7 +280,41 @@ export default {
     }
   }
 }
+//垂直列表布局
+.goods-list {
+  &-item {
+    display: flex;
+    border-bottom: 1px solid $lineColor;
+    .goods-item-img {
+      width: px2rem(120);
+      height: px2rem(120);
+    }
+    .goods-item-desc {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: $marginSize;
+    }
+  }
+}
 
+// 网格布局
+.goods-grid {
+  padding: $marginSize;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  &-item {
+    width: 49%;
+    border-radius: $radiusSize;
+    margin-bottom: $marginSize;
+    .goods-item-img {
+      width: 100%;
+    }
+  }
+}
+
+//3.瀑布流布局
 .goods-waterfall {
   position: relative;
   left: 0;
