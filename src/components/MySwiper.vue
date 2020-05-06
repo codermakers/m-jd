@@ -7,7 +7,7 @@
     <swiper-slide v-for="(item, index) in swiperData" :key="index">
       <img
         class="swiper-slide-img"
-        :src="item.imgUrl"
+        :src="item.icon || item"
         alt=""
         :height="height"
       />
@@ -37,6 +37,10 @@ export default {
     height: {
       type: String,
       default: "auto"
+    },
+    paginationType: {
+      type: String,
+      default: "1"
     }
   },
   components: {
@@ -62,6 +66,37 @@ export default {
         }
       }
     };
+  },
+  created() {
+    this.initPaginationLayout();
+  },
+  methods: {
+    initPaginationLayout() {
+      switch (this.paginationType) {
+        // 圆点分页器
+        case "1":
+          this.swiperOptions.pagination = {
+            //分页器对应的html元素
+            el: ".swiper-pagination",
+            //分页器类型:圆点
+            type: "bullets",
+            //分页器自定义类名
+            bulletClass: "custom-bullet-class"
+          };
+          break;
+        //数字分页器
+        case "2":
+          this.swiperOptions.pagination = {
+            //分页器对应的html元素
+            el: ".swiper-pagination",
+            //分页器类型:圆点
+            type: "fraction",
+            //分页器自定义类名
+            bulletClass: "custom-fraction-class"
+          };
+          break;
+      }
+    }
   }
 };
 </script>
@@ -70,7 +105,9 @@ export default {
 @import "@css/index.scss";
 .swiper-slide-img {
   width: 100%;
+  background-color: $lineColor;
 }
+// 圆点分页器
 .swiper-pagination {
   bottom: px2rem(12);
   // 解决样式穿透问题,否则自定义custom-bullet-class失效
@@ -85,6 +122,24 @@ export default {
   }
   /deep/ .swiper-pagination-bullet-active {
     background-color: #fff;
+  }
+}
+//数字分页器
+// 轮播分页器类型为fraction时的样式
+.swiper-pagination-fraction {
+  width: fit-content;
+  height: auto;
+  left: auto;
+  right: 0;
+  font-size: $infoSize;
+  color: white;
+  padding: px2rem(6) px2rem(18);
+  box-sizing: border-box;
+  border-radius: px2rem(16) 0 0 px2rem(16);
+  background-color: rgba(0, 0, 0, 0.4);
+  .swiper-pagination-current {
+    font-size: 14px;
+    font-weight: 700;
   }
 }
 </style>

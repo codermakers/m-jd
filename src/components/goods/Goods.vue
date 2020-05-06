@@ -37,6 +37,7 @@
       :key="index"
       ref="goodsItem"
       :style="goodsItemStyles[index]"
+      @click="onItemClick(item)"
     >
       <!-- 图片 -->
       <img
@@ -303,6 +304,20 @@ export default {
             ? leftHeightTotal
             : rightHeightTotal) + "px";
       }
+    },
+    onItemClick(item) {
+      if (!item.isHave) {
+        alert("该商品暂无库存");
+        // 注意：无库存，不让它跳转到商品详情页面
+        return;
+      }
+      // 跳转到商品详情页面
+      this.$router.push({
+        name: "GoodsDetail",
+        params: {
+          goods: item
+        }
+      });
     }
   },
   watch: {

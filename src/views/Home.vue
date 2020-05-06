@@ -17,7 +17,14 @@
     </navigation-bar>
     <div class="home-content">
       <!-- Swiper -->
-      <my-swiper :swiperData="swiperData" :height="slideHeight">
+      <my-swiper
+        :swiperData="
+          swiperData.map(item => {
+            return item.icon;
+          })
+        "
+        :height="slideHeight"
+      >
         <slot name="pagination"></slot>
       </my-swiper>
       <!-- 520活动 -->
